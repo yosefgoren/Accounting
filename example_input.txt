@@ -1,0 +1,11 @@
+potato 9
+tomato 1
+chips 2
+
+Yosef:
+	potato
+	tomato
+
+Alon:
+	chips
+	potato

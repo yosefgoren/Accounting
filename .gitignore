@@ -1,0 +1,7 @@
+build/
+CMakeLists.txt
+lex.yy.c
+parser.tab.cpp
+parser.tab.hpp
+.vscode/
+accounting.exe
