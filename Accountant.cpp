@@ -25,7 +25,7 @@ void Accountant::printCostsPerParticipant(){
 map<string, double> Accountant::getCostsPerParticipant(){
 	map<string, double> participant_prices;
 	for(pair<const string, set<string>> p: participants_details){
-		participant_prices.at(p.first) = 0;
+		participant_prices.insert(pair<string, double>(p.first, 0));
 	}
 	for(pair<const string, double> p: items_details){
 		const string& item_id = p.first;
@@ -37,7 +37,7 @@ map<string, double> Accountant::getCostsPerParticipant(){
 		double price = p.second;
 		double price_per_participant = price/participants_paying.size();
 		for(const string& participant_id: participants_paying){
-			participant_prices.at(participant_id) += price_per_participant;
+			participant_prices[participant_id] += price_per_participant;
 		}
 	}
 	return participant_prices;
@@ -64,14 +64,14 @@ void Accountant::deleteDocument(Document document){
 //=========================== private ====================================
 void Accountant::initializeItemDetails(Document document){
 	for(PricedItem item: *document.priced_items){
-		items_details.at(*item.id) = item.price;
+		items_details.insert(pair<string, double>(*item.id, item.price));
 	}
 }
 
 void Accountant::initializeParticipantsDetails(Document document){
 	for(Participant participant: *document.participants){
-		participants_details.at(*participant.id) = set<string>();
-		set<string>& wanted_items_set = participants_details.at(*participant.id);
+		participants_details.insert(std::pair<string, set<string>>(*participant.id, set<string>()));
+		set<string>& wanted_items_set = participants_details[*participant.id];
 		for(string* item_id: *participant.item_id_list){
 			wanted_items_set.insert(*item_id);
 		}
