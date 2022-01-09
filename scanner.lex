@@ -9,9 +9,8 @@
 %option yylineno
 
 item_id				([a-z_]+)
-participant_id		([A-Z]([a-zA-Z_]*))
+participant_id		([A-Z]([a-z_]*))
 number				(0|(-?[1-9][0-9]*)\.?[0-9]*)
-colon				(:)
 whitespace  		([\t\n\r ])
 
 %%
@@ -29,8 +28,6 @@ whitespace  		([\t\n\r ])
 						yylval.number = std::stod(string(yytext));
 						return NUMBER;
 					}
-
-{colon}				return COLON;
 
 {whitespace}		;
 

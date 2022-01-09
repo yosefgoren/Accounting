@@ -34,7 +34,6 @@
 
 %token <id> PARTICIPANT_ID ITEM_ID
 %token <number> NUMBER
-%token COLON
 
 %type <document> Document
 %type <priced_items> PricedItemList
@@ -52,10 +51,10 @@ PricedItemList:		ITEM_ID NUMBER PricedItemList {
 					| {$$ = new vector<PricedItem>();}
 					;
 
-Participants:		PARTICIPANT_ID COLON ItemIdList Participants {
-						assert($4 != nullptr);
-						$4->push_back(Participant($1, $3));
-						$$ = $4;
+Participants:		PARTICIPANT_ID ItemIdList Participants {
+						assert($3 != nullptr);
+						$3->push_back(Participant($1, $2));
+						$$ = $3;
 					}
 					| {$$ = new vector<Participant>();}
 					;
