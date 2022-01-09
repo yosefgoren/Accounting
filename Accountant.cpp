@@ -7,8 +7,7 @@ Accountant::Accountant(Document document, bool delete_document_after_initializat
 	if(verbose){
 		printDocumentContent(document);
 	}
-	initializeItemDetails(document);
-	initializeParticipantsDetails(document);
+	initializeItemAndParticipantsDetails(document);
 	if(delete_document_after_initialization){
 		deleteDocument(document);
 	}
@@ -31,7 +30,7 @@ map<string, double> Accountant::getCostsPerParticipant(){
 		const string& item_id = p.first;
 		set<string> participants_paying = getParticipantsPayingFor(item_id);
 		if(participants_paying.size() == 0){
-			cout << "error: no one is paying for: " << item_id << "." << endl;
+			cerr << "error: no one is paying for: " << item_id << "." << endl;
 			exit(1);
 		}
 		double price = p.second;
@@ -62,18 +61,40 @@ void Accountant::deleteDocument(Document document){
 }
 
 //=========================== private ====================================
+void Accountant::initializeItemAndParticipantsDetails(Document document){
+	initializeItemDetails(document);
+	initializeParticipantsDetails(document);
+}
+
 void Accountant::initializeItemDetails(Document document){
 	for(PricedItem item: *document.priced_items){
 		items_details.insert(pair<string, double>(*item.id, item.price));
 	}
 }
 
+/**
+ * NOTE: assumes that 'initializeItemDetails' has been called on this document before!
+ */
 void Accountant::initializeParticipantsDetails(Document document){
 	for(Participant participant: *document.participants){
 		participants_details.insert(std::pair<string, set<string>>(*participant.id, set<string>()));
 		set<string>& wanted_items_set = participants_details[*participant.id];
-		for(string* item_id: *participant.item_id_list){
-			wanted_items_set.insert(*item_id);
+		
+		if(participant.disqualify_list){
+			//add all the items:
+			for(pair<const string, double> p: items_details){
+				wanted_items_set.insert(p.first);
+			}
+			//remove all the items that the participant wants to be disqualified:
+			for(string* item_id: *participant.item_id_list){
+				wanted_items_set.erase(*item_id);
+			}
+		}
+		else{
+			//add only the wanted items to the list:
+			for(string* item_id: *participant.item_id_list){
+				wanted_items_set.insert(*item_id);
+			}
 		}
 	}
 }

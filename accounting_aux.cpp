@@ -7,11 +7,11 @@ string PricedItem::toString() const{
 	return *id + " : " + to_string(price);
 }
 
-Participant::Participant(string* id, vector<string*>* item_id_list)
-		:id(id), item_id_list(item_id_list){}
+Participant::Participant(string* id, vector<string*>* item_id_list, bool disqualify_list)
+		:id(id), item_id_list(item_id_list), disqualify_list(disqualify_list){}
 
 string Participant::toString() const{
-	string result = "id : " + *id+"\n";
+	string result = *id+(disqualify_list?" does not want":"wants")+":"+"\n";
 	for(string* item: *item_id_list){
 		result += "\t" + *item + "\n";
 	}

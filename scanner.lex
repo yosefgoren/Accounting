@@ -29,6 +29,8 @@ whitespace  		([\t\n\r ])
 						return NUMBER;
 					}
 
+NOT					return NOT;
+
 {whitespace}		;
 
 .       			{printf("unexpected character: %s.at line: %d\n", yytext, yylineno); exit(1);};

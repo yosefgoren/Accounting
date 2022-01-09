@@ -13,7 +13,8 @@ struct PricedItem{
 };
 
 struct Participant{
-	Participant(string* id, vector<string*>* item_id_list);
+	Participant(string* id, vector<string*>* item_id_list, bool disqualify_list);
+	bool disqualify_list;
 	string* id;
 	vector<string*>* item_id_list;
 	string toString() const;

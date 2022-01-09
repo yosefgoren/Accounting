@@ -29,16 +29,19 @@
 	Document* document;
 	vector<PricedItem>* priced_items;
 	vector<Participant>* participants;
-	vector<string*>* wanted_list; 
+	vector<string*>* wanted_list;
+	bool disqualify_list;
 };
 
 %token <id> PARTICIPANT_ID ITEM_ID
 %token <number> NUMBER
+%token NOT
 
 %type <document> Document
 %type <priced_items> PricedItemList
 %type <participants> Participants
 %type <wanted_list> ItemIdList
+%type <disqualify_list> SelectionModefier
 
 %%
 Document:			PricedItemList Participants {global_document_data = new Document($1, $2);};
@@ -51,12 +54,16 @@ PricedItemList:		ITEM_ID NUMBER PricedItemList {
 					| {$$ = new vector<PricedItem>();}
 					;
 
-Participants:		PARTICIPANT_ID ItemIdList Participants {
-						assert($3 != nullptr);
-						$3->push_back(Participant($1, $2));
-						$$ = $3;
+Participants:		PARTICIPANT_ID SelectionModefier ItemIdList Participants {
+						assert($4 != nullptr);
+						$4->push_back(Participant($1, $3, $2));
+						$$ = $4;
 					}
 					| {$$ = new vector<Participant>();}
+					;
+
+SelectionModefier:	NOT {$$ = true;}
+					| {$$ = false;}
 					;
 					
 ItemIdList:			ITEM_ID ItemIdList {

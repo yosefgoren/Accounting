@@ -19,6 +19,7 @@ private:
 	map<string, double> items_details;
 	map<string, set<string>> participants_details;
 
+	void initializeItemAndParticipantsDetails(Document document);
 	void initializeParticipantsDetails(Document document);
 	void initializeItemDetails(Document document);
 	set<string> getParticipantsPayingFor(const string& item_id);
