@@ -23,7 +23,7 @@
 %union{
 	//lexer proivided fields:
 	std::string* id;
-	int number;
+	double number;
 	
 	//parser metadata fields:
 	Document* document;

@@ -2,14 +2,15 @@
 	#include <stdlib.h>
 	#include "accounting_aux.hpp"
 	#include "parser.tab.hpp"
+	#include <string>
 %}
 
 %option noyywrap
 %option yylineno
 
-item_id				([a-z]+)
+item_id				([a-z_]+)
 participant_id		([A-Z]([a-zA-Z_]*))
-number				(0|(-?[1-9][0-9]*))
+number				(0|(-?[1-9][0-9]*)\.?[0-9]*)
 colon				(:)
 whitespace  		([\t\n\r ])
 
@@ -25,7 +26,7 @@ whitespace  		([\t\n\r ])
 					}
 
 {number}			{
-						yylval.number = atoi(yytext);
+						yylval.number = std::stod(string(yytext));
 						return NUMBER;
 					}
 

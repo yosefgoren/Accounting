@@ -5,3 +5,5 @@ parser.tab.cpp
 parser.tab.hpp
 .vscode/
 accounting.exe
+accounting
+*.acclst*
